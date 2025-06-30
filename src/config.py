@@ -12,7 +12,7 @@ if not load_dotenv(dotenv_path=dotenv_path):
 # Define your configuration variables here
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LLM_BACKEND = os.getenv("LLM_BACKEND", "OPENAI")
-MAX_ENTRIES = int(os.getenv("MAX_ENTRIES", "150"))
+MAX_ENTRIES = int(os.getenv("MAX_ENTRIES", "99"))
 
 # Validate critical variables
 if not OPENAI_API_KEY:
