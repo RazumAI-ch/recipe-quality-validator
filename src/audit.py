@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import logging
 import config
 # logging.basicConfig(level=logging.INFO)
+import config
 
 load_dotenv()
 
@@ -22,11 +23,11 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
     # logging.info(f"Prompt: {system_prompt}")
     # logging.info(f"Prompt: {user_prompt}")
 
-    MAX_ENTRIES = 1000
+    max_entries = config.MAX_ENTRIES
 
-    if len(recipe_entries) > MAX_ENTRIES:
-        truncated = recipe_entries[:MAX_ENTRIES]
-        logging.warning(f"Truncated to first {MAX_ENTRIES} entries to stay within context limits.")
+    if len(recipe_entries) > max_entries:
+        truncated = recipe_entries[:max_entries]
+        logging.warning(f"Truncated to first {max_entries} entries to stay within context limits.")
     else:
         truncated = recipe_entries
 

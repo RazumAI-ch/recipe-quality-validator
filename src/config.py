@@ -18,3 +18,5 @@ if not OPENAI_API_KEY:
         "OPENAI_API_KEY is not set.\n"
         "Please create a .env file or set it as an environment variable."
     )
+
+ MAX_ENTRIES = os.getenv("MAX_ENTRIES", 150)
