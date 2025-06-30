@@ -1,7 +1,8 @@
 # src/config.py
 
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
 
 # Always load .env from project root
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
@@ -11,6 +12,7 @@ if not load_dotenv(dotenv_path=dotenv_path):
 # Define your configuration variables here
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LLM_BACKEND = os.getenv("LLM_BACKEND", "OPENAI")
+MAX_ENTRIES = int(os.getenv("MAX_ENTRIES", "150"))
 
 # Validate critical variables
 if not OPENAI_API_KEY:
@@ -18,5 +20,3 @@ if not OPENAI_API_KEY:
         "OPENAI_API_KEY is not set.\n"
         "Please create a .env file or set it as an environment variable."
     )
-
- MAX_ENTRIES = os.getenv("MAX_ENTRIES", 150)
