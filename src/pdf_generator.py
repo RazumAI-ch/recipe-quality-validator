@@ -1,7 +1,8 @@
-from fpdf import FPDF
 from datetime import datetime
+
 import pytz
-import json
+from fpdf import FPDF
+
 
 def clean_nested_text(obj):
     """
@@ -139,14 +140,14 @@ def generate_audit_report(audit_results, original_filename, file_contents, summa
         pdf.ln(2)
 
     # Appendix
-    pdf.add_page()
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, "Appendix: Full File Content", ln=True)
-    pdf.ln(3)
-
-    pdf.set_font("Courier", "", 8)
-    file_json = json.dumps(file_contents, indent=2, ensure_ascii=False, sort_keys=True)
-    for line in file_json.splitlines():
-        pdf.multi_cell(0, 4, line)
+    # pdf.add_page()
+    # pdf.set_font("Arial", "B", 14)
+    # pdf.cell(0, 10, "Appendix: Full File Content", ln=True)
+    # pdf.ln(3)
+    #
+    # pdf.set_font("Courier", "", 8)
+    # file_json = json.dumps(file_contents, indent=2, ensure_ascii=False, sort_keys=True)
+    # for line in file_json.splitlines():
+    #     pdf.multi_cell(0, 4, line)
 
     return pdf.output(dest="S").encode("latin1")

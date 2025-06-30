@@ -1,18 +1,22 @@
-import streamlit as st
 import textwrap
+
+import streamlit as st
+
+import config
+
 
 def display_controls():
 
     # Default model
     model = "gpt-4o"
     # Default number of entries evaluated from the file
-    num_entries = 10000
+    # num_entries = config.MAX_ENTRIES
 
     num_entries = st.slider(
       "🔢 Number of records to process from file:",
       min_value=10,
       max_value=10000,
-      value=100,
+        value=config.MAX_ENTRIES,
       step=10,
       help="Controls how many records to evaluate in this run."
     )

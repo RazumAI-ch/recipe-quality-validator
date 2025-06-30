@@ -2,16 +2,14 @@
 # This module sends the recipe data to OpenAI's LLM and retrieves the validation response.
 # It builds a prompt based on the recipe content and selected model.
 
-import os
 import json
+import logging
 import re
-from pyexpat.errors import messages
 from typing import Any
 
-from openai import OpenAI
 from dotenv import load_dotenv
-import logging
-import config
+from openai import OpenAI
+
 # logging.basicConfig(level=logging.INFO)
 import config
 
@@ -55,7 +53,7 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
     # First try direct JSON parsing
     try:
         parsed = json.loads(content)
-        logging.info("Successfully parsed model response JSON.")
+        # logging.info("Successfully parsed model response JSON.")
         if "summary_text" not in parsed:
             parsed["summary_text"] = ""
         return parsed
@@ -63,7 +61,8 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
         logging.warning("Direct JSON parsing failed. Attempting to extract JSON substring.")
 
         # Try to extract JSON between the first and last curly braces
-        match = re.search(r"\{.*\}", content, re.DOTALL)
+        match = re.search(r"{.*}", content, re.DOTALL)
+
         if match:
             json_str = match.group(0)
             try:
