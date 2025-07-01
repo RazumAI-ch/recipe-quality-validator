@@ -1,19 +1,24 @@
-# audit_runner.py
-# This file orchestrates the process of running the audit pipeline.
-# It handles entry slicing, model-based analysis, PDF generation, and output delivery.
+# =====================================
+# File: audit_runner.py
+# Description:
+#   Provides the main orchestration logic to run audits,
+#   integrate analysis modules, and process results.
+# =====================================
 
-from datetime import datetime
+import io
 import json
+import logging
+from collections import Counter
+from datetime import datetime
+
+import pandas as pd
+import pytz
 import streamlit as st
+
 from src.audit import analyze_recipe
 from src.pdf_generator import generate_audit_report
 from src.utils import estimate_cost
-import pandas as pd
-import io
-import pytz
-from collections import Counter
 
-import logging
 # logging.basicConfig(level=logging.INFO)
 
 severity_mapping = {

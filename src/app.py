@@ -1,21 +1,25 @@
-# app.py
-# This is the main entry point for the Streamlit application that runs the Healthcare Recipe Quality Validator.
+# =====================================
+# File: app.py
+# Description:
+#   Entry point for the Streamlit application.
+#   Loads configuration, initializes the audit runner,
+#   and manages user interactions.
+# =====================================
 
-import sys
 import os
+import sys
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import logging
 import hashlib
 
 # logging.basicConfig(level=logging.INFO)
 
-import config
 import streamlit as st
 from src.controls import display_controls
 from src.audit_runner import run_audit
 from src.layout import render_layout
 from src.utils import detect_file_type
-from datetime import datetime
 
 # Set Streamlit page config
 st.set_page_config(
