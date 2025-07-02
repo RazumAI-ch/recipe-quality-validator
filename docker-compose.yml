@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   app:
     build: .
@@ -6,7 +8,7 @@ services:
       - .:/workspace
     env_file:
       - .env
-    command: >
-      streamlit run /workspace/src/app.py
     ports:
       - "8501:8501"
+    command: >
+      streamlit run /workspace/src/app.py
