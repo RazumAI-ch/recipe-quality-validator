@@ -1,19 +1,18 @@
-# 🧪 OpenAI Healthcare Recipe Quality Validator
+# 🧪 OpenAI Healthcare Recipe Quality Validator  
+![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)  
+[![Docker Hub](https://img.shields.io/docker/pulls/igorrazumny/openai-recipe-quality-validator?style=flat-square)](https://hub.docker.com/r/igorrazumny/openai-recipe-quality-validator)
 
-![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)
-
-This Streamlit app audits healthcare manufacturing recipes using OpenAI GPT-4o or your own internal LLM backend.  
-After analysis, it generates a downloadable PDF report with findings and suggestions.
+Audits healthcare recipes using OpenAI or custom LLMs and generates a PDF report with findings.
 
 ---
 
 ## 🚀 Features
 
-- ✅ Upload JSON or CSV recipe files
-- ✅ Analyze structure, completeness, and formatting
-- ✅ Get a downloadable PDF audit report
-- ✅ Switch between OpenAI and Azure (Portkey) backends
-- ✅ Limit entries or audit the full dataset with cost estimation
+- ✅ Upload JSON or CSV recipe files  
+- ✅ Analyze structure, completeness, and formatting  
+- ✅ Get a downloadable PDF audit report  
+- ✅ Switch between OpenAI and Azure (Portkey) backends  
+- ✅ Limit entries or audit the full dataset with cost estimation  
 - ✅ Automatically categorize deviations by severity (Critical, Moderate, Minor)
 
 ---
@@ -28,11 +27,17 @@ source venv/bin/activate
 pip install -r requirements.txt --break-system-packages
 ```
 
+---
+
 ### 🔐 Environment Configuration
 
-Create a `.env.openai` or `.env.internal` file in the project root.
+You must create either a `.env.openai` **or** a `.env.internal` file in the project root, depending on which backend you want to use.
 
-#### Example `.env.openai`
+> ⚠️ Only one backend is active at a time — if you're using `.env.openai`, then `.env.internal` will be ignored (and vice versa).
+
+#### 👉 Use `.env.openai` if:
+
+You want to connect **directly to OpenAI APIs** using your own API key.
 
 ```env
 LLM_BACKEND=OPENAI
@@ -40,7 +45,9 @@ OPENAI_API_KEY=sk-...
 MAX_ENTRIES=100
 ```
 
-#### Example `.env.internal`
+#### 👉 Use `.env.internal` if:
+
+You want to route requests through an **intermediate API layer** like **Portkey**, for example with Azure OpenAI.
 
 ```env
 LLM_BACKEND=INTERNAL
@@ -51,6 +58,9 @@ PORTKEY_PROVIDER=azure-openai
 PORTKEY_RETRY_ATTEMPTS=5
 MAX_ENTRIES=100
 ```
+
+You do **not** need to configure both files.  
+Just pick one — the app will ignore the other.
 
 Then run the app:
 
@@ -73,16 +83,29 @@ Create either `.env.openai` or `.env.internal` in the project root, as shown abo
 ### 2. Build the image
 
 ```bash
-docker build -t recipe-validator .
+docker build -t igorrazumny/openai-recipe-quality-validator .
 ```
 
-### 3. Run the container
+### 3. Run with Docker Compose
 
 ```bash
 docker-compose up
 ```
 
 Then open your browser: [http://localhost:8501](http://localhost:8501)
+
+---
+
+## 📦 Prebuilt Docker Image
+
+You can skip local builds and run the app directly using the prebuilt Docker Hub image:
+
+```bash
+docker pull igorrazumny/openai-recipe-quality-validator:latest
+docker run --env-file .env.openai -p 8501:8501 igorrazumny/openai-recipe-quality-validator:latest
+```
+
+> Use `.env.internal` instead of `.env.openai` if you're routing through Portkey.
 
 ---
 
@@ -125,11 +148,10 @@ Then open your browser: [http://localhost:8501](http://localhost:8501)
 
 ## ⚙️ CI/CD Notes
 
-A GitHub Actions workflow will build the Docker image on every push to `main`.  
-Support for pushing to Docker Hub or GitHub Container Registry is planned.
+A GitHub Actions workflow for automatic Docker builds can be added to publish to Docker Hub on every push to `main`.
 
 ---
 
 ⚠️ This is a portfolio demonstration project built with mock data only.  
 It is not affiliated with any employer, client, or production system.  
-No confidential or proprietary information is included. 
+No confidential or proprietary information is included.
