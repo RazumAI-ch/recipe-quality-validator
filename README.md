@@ -1,3 +1,4 @@
+[<img src="https://github.com/igorrazumny/openai-recipe-quality-validator/blob/main/public_assets/Logo%206.png?raw=true" alt="Banner" width="200"/>
 **🧪 OpenAI Healthcare Recipe Quality Validator**
 
 This Streamlit app audits healthcare manufacturing recipes using OpenAI GPT-4o.  
