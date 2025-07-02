@@ -1,5 +1,7 @@
 # 🧪 OpenAI Healthcare Recipe Quality Validator
 
+![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)
+
 This Streamlit app audits healthcare manufacturing recipes using OpenAI GPT-4o or your own internal LLM backend.  
 After analysis, it generates a downloadable PDF report with findings and suggestions.
 
@@ -19,7 +21,7 @@ After analysis, it generates a downloadable PDF report with findings and suggest
 ## ⚙️ Local Setup
 
 ```bash
-git clone https://github.com/your-username/openai-recipe-quality-validator.git
+git clone https://github.com/igorrazumny/openai-recipe-quality-validator.git
 cd openai-recipe-quality-validator
 python3 -m venv venv
 source venv/bin/activate
@@ -77,14 +79,10 @@ docker build -t recipe-validator .
 ### 3. Run the container
 
 ```bash
-# For OpenAI backend
-docker run --env ENV_MODE=openai --env-file .env.openai -p 8501:8501 recipe-validator
-
-# For Internal backend (Azure, Portkey)
-docker run --env ENV_MODE=internal --env-file .env.internal -p 8501:8501 recipe-validator
+docker-compose up
 ```
 
-Open your browser at: [http://localhost:8501](http://localhost:8501)
+Then open your browser: [http://localhost:8501](http://localhost:8501)
 
 ---
 
@@ -100,14 +98,38 @@ Open your browser at: [http://localhost:8501](http://localhost:8501)
 │   ├── controls.py        # Sidebar controls
 │   ├── layout.py          # UI layout and download links
 │   └── utils.py           # Helpers (e.g., JSON parsing, hashing)
-├── .env.openai            # Sample OpenAI config (user-created)
+├── .env.example           # Sample config file
+├── .gitignore
+├── .pre-commit hook       # Prevents secrets from being committed
 ├── Dockerfile
+├── docker-compose.yml
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
+## 🧪 Developer Checklist
+
+- [x] Clone the repo
+- [x] Create `.env.openai` or `.env.internal`
+- [x] Add your OpenAI or Azure API key
+- [x] Run locally with Docker:
+  ```bash
+  docker-compose up
+  ```
+- [x] Use `.gitignore` to keep secrets out of version control
+- [x] ✅ Pre-commit hook blocks commits with `sk-...` keys
+
+---
+
+## ⚙️ CI/CD Notes
+
+A GitHub Actions workflow will build the Docker image on every push to `main`.  
+Support for pushing to Docker Hub or GitHub Container Registry is planned.
+
+---
+
 ⚠️ This is a portfolio demonstration project built with mock data only.  
 It is not affiliated with any employer, client, or production system.  
-No confidential or proprietary information is included.
+No confidential or proprietary information is included. 
