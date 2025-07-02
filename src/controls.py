@@ -29,6 +29,7 @@ def display_controls():
     # Default user prompt
     default_user_prompt = textwrap.dedent("""\
     You are an expert Quality Assurance auditor specializing in pharmaceutical manufacturing processes.
+    
     You will receive a list of structured JSON records describing recipe execution steps, including process parameters,
     operator information, timestamps, and status codes.
 
