@@ -13,18 +13,15 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements file and update pip as root
+# Copy the requirements file and install dependencies as root
 COPY --chown=appuser:appgroup requirements.txt .
-RUN pip install --upgrade pip
-
-# Switch to the non-root user
-USER appuser
-
-# Install requirements
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the full project and change ownership
 COPY --chown=appuser:appgroup . .
+
+# Switch to the non-root user
+USER appuser
 
 # Expose Streamlit's default port
 EXPOSE 8501
