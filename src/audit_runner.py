@@ -80,8 +80,7 @@ def run_audit(content_str, file_type, entry_limit, model, file_name, system_prom
                 st.warning("Audit canceled.")
                 return
         else:
-            entry_count = int(str(entry_limit).split(" ")[0])
-            data = data[:entry_count]
+            data = data[:entry_limit]
 
         # Step 3: Perform analysis
         with st.spinner("Running audit with OpenAI..."):
