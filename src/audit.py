@@ -10,13 +10,9 @@ import logging
 from typing import Any
 
 import requests
-from openai import OpenAI
 
 import config
 from src.utils import extract_json_from_text
-
-# Initialize OpenAI client (used only if LLM_BACKEND is OPENAI)
-client = OpenAI(api_key=config.OPENAI_API_KEY)
 
 
 def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt=""):
@@ -45,7 +41,9 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
 
     # Determine backend and make the appropriate API call
     if config.LLM_BACKEND == "OPENAI":
-        # OpenAI API Call
+        # noinspection PyUnresolvedReferences
+        from openai import OpenAI  # Local import to avoid issues when not using OpenAI
+        client = OpenAI(api_key=config.OPENAI_API_KEY)
         response = client.chat.completions.create(
             model=model,
             messages=messages,  # type: ignore[arg-type]
