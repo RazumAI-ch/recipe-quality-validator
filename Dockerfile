@@ -27,4 +27,4 @@ USER appuser
 EXPOSE 8501
 
 # Entry point
-CMD ["streamlit", "run", "src/app.py"]
+CMD ["streamlit", "run", "/workspace/src/app.py"]
