@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /workspace
 
 # Create a non-root user and group
-RUN groupadd -r appgroup && useradd --no-log-init -r -g appgroup appuser
+RUN groupadd -r appgroup && useradd --no-log-init -r -m -g appgroup appuser
 
 # Install required OS packages
 RUN apt-get update && apt-get install -y \
