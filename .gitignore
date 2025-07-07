@@ -1,9 +1,14 @@
 .venv/
 venv/
 __pycache__/
-.env
-.env.*
-!.env.example
+
+.env            # Blocks .env
+.env.*          # Blocks .env.anything
+.env.openai     # Explicit backup
+.env.internal   # Explicit backup
+
+!.env.example   # Exception: keep .env.example
+
 *.pyc
 .DS_Store
 .idea/
