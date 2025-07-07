@@ -3,3 +3,4 @@ openai
 pandas
 python-dotenv
 fpdf
+portkey-ai>=1.14.0

@@ -7,12 +7,16 @@
 
 import json
 import logging
+import os
 from typing import Any
 
-import requests
+from dotenv import load_dotenv
 
 import config
 from src.utils import extract_json_from_text
+
+# Load environment variables
+load_dotenv()
 
 
 def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt=""):
@@ -53,27 +57,36 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
         content = response.choices[0].message.content.strip()
 
     elif config.LLM_BACKEND == "INTERNAL":
-        # Internal API Call (via Portkey)
-        payload = {
-            "model": model,
-            "messages": messages,
-            "virtual_key": config.PORTKEY_VIRTUAL_KEY,
-            "provider": config.PORTKEY_PROVIDER,
-            "retry": {"attempts": config.PORTKEY_RETRY_ATTEMPTS},
-        }
-        headers = {"Authorization": f"Bearer {config.INTERNAL_API_PORT_KEY}"}
+        from portkey_ai import Portkey
 
-        response = requests.post(
-            config.INTERNAL_API_URL,
-            json=payload,
-            headers=headers
+        portkey = Portkey(
+            api_key=os.getenv("PORTKEY_AZURE_API_KEY"),
+            base_url=os.getenv("PORTKEY_BASE_URL"),
+            debug=True,
+            provider="azure-openai"
         )
 
-        if response.status_code != 200:
-            logging.error(f"Internal API call failed: {response.status_code}, {response.text}")
-            raise ValueError("Internal API call failed; check the logs for details.")
+        try:
+            response = portkey.chat.completions.create(
+                messages=messages,
+                model="gpt-35-turbo",  # Azure deployment name
+                max_tokens=500,  # hardcoded token limit
+                temperature=0.7,  # hardcoded temperature
+                stream=True
+            )
 
-        content = response.json()
+            full_content = ""
+            for chunk in response:
+                if chunk.choices and hasattr(chunk.choices[0].delta, "content") and chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    full_content += content
+                    print(content, end="", flush=True)
+
+            content = full_content
+
+        except Exception as e:
+            logging.error(f"Portkey API call failed: {str(e)}")
+            raise ValueError("Portkey API call failed; check logs for details.")
 
     else:
         raise ValueError(f"Unsupported LLM backend: {config.LLM_BACKEND}")
