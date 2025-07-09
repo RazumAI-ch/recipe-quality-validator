@@ -30,14 +30,9 @@ print("[DEBUG] Current working directory:", os.getcwd())
 # =========================
 LLM_BACKEND = os.getenv("LLM_BACKEND", "OPENAI").upper()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-INTERNAL_API_PORT_KEY = os.getenv("INTERNAL_API_PORT_KEY")
-INTERNAL_API_URL = os.getenv("INTERNAL_API_URL", "http://internal-api.example.com")
-PORTKEY_VIRTUAL_KEY = os.getenv("PORTKEY_VIRTUAL_KEY")
-PORTKEY_PROVIDER = os.getenv("PORTKEY_PROVIDER", "azure-openai")
-PORTKEY_RETRY_ATTEMPTS = int(os.getenv("PORTKEY_RETRY_ATTEMPTS", "3"))
-
-MAX_ENTRIES = int(os.getenv("MAX_ENTRIES", "64"))
+PORTKEY_AZURE_API_KEY = os.getenv("PORTKEY_AZURE_API_KEY")
+PORTKEY_BASE_URL = os.getenv("PORTKEY_BASE_URL")
+MAX_ENTRIES = int(os.getenv("MAX_ENTRIES", "5000"))
 
 # =========================
 # Validation
@@ -48,9 +43,9 @@ if LLM_BACKEND == "OPENAI":
             "Missing OPENAI_API_KEY. Please set it before running in OPENAI mode."
         )
 elif LLM_BACKEND == "INTERNAL":
-    if not INTERNAL_API_PORT_KEY:
+    if not PORTKEY_AZURE_API_KEY or not PORTKEY_BASE_URL:
         raise RuntimeError(
-            "Missing INTERNAL_API_PORT_KEY. Please set it before running in INTERNAL mode."
+            "Missing PORTKEY_AZURE_API_KEY or PORTKEY_BASE_URL. Please set both before running in INTERNAL mode."
         )
 else:
     raise RuntimeError(
@@ -63,11 +58,8 @@ else:
 CONFIG = {
     "llm_backend": LLM_BACKEND,
     "openai_api_key": OPENAI_API_KEY,
-    "internal_api_port_key": INTERNAL_API_PORT_KEY,
-    "internal_api_url": INTERNAL_API_URL,
-    "portkey_virtual_key": PORTKEY_VIRTUAL_KEY,
-    "portkey_provider": PORTKEY_PROVIDER,
-    "portkey_retry_attempts": PORTKEY_RETRY_ATTEMPTS,
+    "portkey_azure_api_key": PORTKEY_AZURE_API_KEY,
+    "portkey_base_url": PORTKEY_BASE_URL,
     "max_entries": MAX_ENTRIES,
 }
 
@@ -77,5 +69,5 @@ CONFIG = {
 print(f"[DEBUG] Config loaded from mode: {env_mode.upper()}")
 print(f"[DEBUG] LLM_BACKEND = {LLM_BACKEND}")
 print(f"[DEBUG] OPENAI_API_KEY present: {bool(OPENAI_API_KEY)}")
-print(f"[DEBUG] INTERNAL_API_PORT_KEY present: {bool(INTERNAL_API_PORT_KEY)}")
+print(f"[DEBUG] PORTKEY_AZURE_API_KEY present: {bool(PORTKEY_AZURE_API_KEY)}")
 print(f"[DEBUG] CONFIG = {CONFIG}")
