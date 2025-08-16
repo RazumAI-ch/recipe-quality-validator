@@ -7,6 +7,7 @@ on:
 
 jobs:
   build-and-push:
+    if: github.repository == 'igorrazumny/recipe-quality-validator'
     runs-on: ubuntu-latest
 
     steps:
