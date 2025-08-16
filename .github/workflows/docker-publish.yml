@@ -28,6 +28,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: igorrazumny/openai-recipe-quality-validator:latest
+          tags: igorrazumny/recipe-quality-validator:latest
           build-args: |
             CACHE_BUSTER=${{ github.run_id }}

@@ -36,7 +36,7 @@ print("[DEBUG] Current working directory:", os.getcwd())
 # =========================
 # Load environment variables
 # =========================
-LLM_BACKEND = os.getenv("LLM_BACKEND", "OPENAI").upper()
+LLM_BACKEND = os.getenv("LLM_BACKEND", "GEMINI").upper()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 PORTKEY_AZURE_API_KEY = os.getenv("PORTKEY_AZURE_API_KEY")
 PORTKEY_BASE_URL = os.getenv("PORTKEY_BASE_URL")

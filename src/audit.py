@@ -21,7 +21,7 @@ load_dotenv()
 
 def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt=""):
     """
-    Analyze recipe entries using the selected backend (OpenAI or Internal).
+    Analyze recipe entries using the selected backend (OpenAI, Gemini or Internal).
     """
     max_entries = config.MAX_ENTRIES
 
@@ -93,7 +93,7 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
         # We combine the system and user prompts into a single prompt.
         combined_prompt = f"{system_prompt}\n\n{full_prompt}"
 
-        gemini_model = genai.GenerativeModel('gemini-pro')
+        gemini_model = genai.GenerativeModel('gemini-1.5-pro')
         response = gemini_model.generate_content(combined_prompt)
         content = response.text.strip()
 

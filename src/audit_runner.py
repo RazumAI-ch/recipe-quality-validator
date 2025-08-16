@@ -83,7 +83,7 @@ def run_audit(content_str, file_type, entry_limit, model, file_name, system_prom
             data = data[:entry_limit]
 
         # Step 3: Perform analysis
-        with st.spinner("Running audit with OpenAI..."):
+        with st.spinner("Running audit with Gemini..."):
             result_json = analyze_recipe(data, model, system_prompt, user_prompt)
             records = result_json.get("records", [])
 
