@@ -108,7 +108,7 @@ if uploaded_file:
 
 # 🟢 Show spinner while running
 if st.session_state.audit_running:
-    st.info("🔄 Running audit with OpenAI... Please wait...")
+    st.info("🔄 Running audit with Gemini... Please wait...")
 
 # 🟢 Show results when done
 elif st.session_state.audit_done and st.session_state.audit_result:

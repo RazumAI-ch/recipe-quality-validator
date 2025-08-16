@@ -6,6 +6,14 @@
 #   Validates correct setup for the selected LLM backend.
 # =====================================
 
+# =====================================
+# File: config.py
+# Description:
+#   Manages configuration via environment variables.
+#   Dynamically loads the correct .env file based on ENV_MODE.
+#   Validates correct setup for the selected LLM backend.
+# =====================================
+
 import os
 
 from dotenv import load_dotenv, find_dotenv
@@ -32,6 +40,7 @@ LLM_BACKEND = os.getenv("LLM_BACKEND", "OPENAI").upper()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 PORTKEY_AZURE_API_KEY = os.getenv("PORTKEY_AZURE_API_KEY")
 PORTKEY_BASE_URL = os.getenv("PORTKEY_BASE_URL")
+GEMINI_API_KEY = os.getenv("GEMINI_STUDIO_API_KEY")  # <-- ADD THIS LINE
 MAX_ENTRIES = int(os.getenv("MAX_ENTRIES", "5000"))
 
 # =========================
@@ -47,9 +56,14 @@ elif LLM_BACKEND == "INTERNAL":
         raise RuntimeError(
             "Missing PORTKEY_AZURE_API_KEY or PORTKEY_BASE_URL. Please set both before running in INTERNAL mode."
         )
+elif LLM_BACKEND == "GEMINI":  # <-- ADD THIS BLOCK
+    if not GEMINI_API_KEY:
+        raise RuntimeError(
+            "Missing GEMINI_STUDIO_API_KEY. Please set it before running in GEMINI mode."
+        )
 else:
     raise RuntimeError(
-        f"Invalid LLM_BACKEND '{LLM_BACKEND}'. Must be 'OPENAI' or 'INTERNAL'."
+        f"Invalid LLM_BACKEND '{LLM_BACKEND}'. Must be 'OPENAI', 'INTERNAL', or 'GEMINI'."
     )
 
 # =========================
@@ -60,6 +74,7 @@ CONFIG = {
     "openai_api_key": OPENAI_API_KEY,
     "portkey_azure_api_key": PORTKEY_AZURE_API_KEY,
     "portkey_base_url": PORTKEY_BASE_URL,
+    "gemini_api_key": GEMINI_API_KEY,  # <-- ADD THIS LINE
     "max_entries": MAX_ENTRIES,
 }
 
@@ -70,4 +85,5 @@ print(f"[DEBUG] Config loaded from mode: {env_mode.upper()}")
 print(f"[DEBUG] LLM_BACKEND = {LLM_BACKEND}")
 print(f"[DEBUG] OPENAI_API_KEY present: {bool(OPENAI_API_KEY)}")
 print(f"[DEBUG] PORTKEY_AZURE_API_KEY present: {bool(PORTKEY_AZURE_API_KEY)}")
+print(f"[DEBUG] GEMINI_API_KEY present: {bool(GEMINI_API_KEY)}")  # <-- ADD THIS LINE
 print(f"[DEBUG] CONFIG = {CONFIG}")

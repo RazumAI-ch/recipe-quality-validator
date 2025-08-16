@@ -38,19 +38,17 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
         f"{json.dumps(truncated, indent=2, sort_keys=True)}"
     )
 
-    messages: list[dict[str, Any]] = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": full_prompt},
-    ]
-
     # Determine backend and make the appropriate API call
     if config.LLM_BACKEND == "OPENAI":
-        # noinspection PyUnresolvedReferences
-        from openai import OpenAI  # Local import to avoid issues when not using OpenAI
+        from openai import OpenAI
         client = OpenAI(api_key=config.OPENAI_API_KEY)
+        messages: list[dict[str, Any]] = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": full_prompt},
+        ]
         response = client.chat.completions.create(
             model=model,
-            messages=messages,  # type: ignore[arg-type]
+            messages=messages,
             temperature=0,
             top_p=1,
         )
@@ -58,35 +56,46 @@ def analyze_recipe(recipe_entries, model="gpt-4o", system_prompt="", user_prompt
 
     elif config.LLM_BACKEND == "INTERNAL":
         from portkey_ai import Portkey
-
         portkey = Portkey(
             api_key=os.getenv("PORTKEY_AZURE_API_KEY"),
             base_url=os.getenv("PORTKEY_BASE_URL"),
             debug=True,
             provider="azure-openai"
         )
-
+        messages: list[dict[str, Any]] = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": full_prompt},
+        ]
         try:
             response = portkey.chat.completions.create(
                 messages=messages,
-                model="gpt-35-turbo",  # Azure deployment name
-                max_tokens=500,  # hardcoded token limit
-                temperature=0.7,  # hardcoded temperature
+                model="gpt-35-turbo",
+                max_tokens=500,
+                temperature=0.7,
                 stream=True
             )
-
             full_content = ""
             for chunk in response:
                 if chunk.choices and hasattr(chunk.choices[0].delta, "content") and chunk.choices[0].delta.content:
-                    content = chunk.choices[0].delta.content
-                    full_content += content
-                    print(content, end="", flush=True)
-
+                    content_chunk = chunk.choices[0].delta.content
+                    full_content += content_chunk
+                    print(content_chunk, end="", flush=True)
             content = full_content
-
         except Exception as e:
             logging.error(f"Portkey API call failed: {str(e)}")
             raise ValueError("Portkey API call failed; check logs for details.")
+
+    elif config.LLM_BACKEND == "GEMINI":  # <-- ADD THIS ENTIRE BLOCK
+        import google.generativeai as genai
+        genai.configure(api_key=config.GEMINI_API_KEY)
+
+        # Gemini uses a different prompt structure (no system prompt)
+        # We combine the system and user prompts into a single prompt.
+        combined_prompt = f"{system_prompt}\n\n{full_prompt}"
+
+        gemini_model = genai.GenerativeModel('gemini-pro')
+        response = gemini_model.generate_content(combined_prompt)
+        content = response.text.strip()
 
     else:
         raise ValueError(f"Unsupported LLM backend: {config.LLM_BACKEND}")
