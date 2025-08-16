@@ -1,4 +1,3 @@
-# File: Dockerfile
 # Use Python 3.11 base image
 FROM python:3.11-slim
 
@@ -12,26 +11,28 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Roche certificates
+# Install needed certificates
 WORKDIR /etc/ssl/certs/
 RUN curl -O https://certinfo.roche.com/rootcerts/Roche%20G3%20Root%20CA.crt && \
     curl --remote-name-all "https://certinfo.roche.com/rootcerts/Roche%20G3%20Issuing%20CA%20[1-6].crt"
 
-# Set working directory for app
+# Set the working directory
 WORKDIR /workspace
 
-# Copy entrypoint first and make it executable
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Copy the requirements file and install dependencies as root
+COPY --chown=appuser:appgroup requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the app with ownership to non-root user
+# Copy the full project and change ownership
 COPY --chown=appuser:appgroup . .
 
-# Switch to non-root user
+# Switch to the non-root user
 USER appuser
 
-# Expose default Streamlit port
+# Expose the port that Cloud Run will connect to
 EXPOSE 8080
 
-# Set entrypoint
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# **MODIFIED ENTRYPOINT/CMD**
+# This command tells Streamlit to run on the port provided by Cloud Run ($PORT)
+# and listen on all network interfaces (0.0.0.0), which is required in a container.
+CMD streamlit run /workspace/src/app.py --server.port $PORT --server.address 0.0.0.0

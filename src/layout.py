@@ -3,13 +3,13 @@
 # including the project overview and file download section.
 
 import streamlit as st
-from pathlib import Path
+
 
 def render_layout():
-    st.title("📋 OpenAI Healthcare Recipe Quality Validator")
+    st.title("📋 Gemini Healthcare Recipe Quality Validator")
 
     st.markdown("""
-    This application audits healthcare manufacturing recipes using an advanced AI model (OpenAI GPT-4o).
+    This application audits healthcare manufacturing recipes using an advanced AI model (gemini-1.5-pro).
     After analyzing the uploaded recipe, it generates an evaluation report available for download in PDF format.
     """)
 
