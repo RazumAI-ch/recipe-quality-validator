@@ -6,9 +6,10 @@ __pycache__/
 .env.*          # Blocks .env.anything
 .env.openai     # Explicit backup
 .env.internal   # Explicit backup
+.idea/.env.gemini
 
 !.env.example   # Exception: keep .env.example
 
 *.pyc
 .DS_Store
-.idea/
+
