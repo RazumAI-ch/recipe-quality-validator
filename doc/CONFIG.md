@@ -15,4 +15,7 @@ gcloud run deploy recipe-validator \
 --set-env-vars="LLM_BACKEND=GEMINI" \
 --set-secrets="GEMINI_STUDIO_API_KEY=gemini-api-key:latest"
 
+# Manual commit to RazumAI-ch
 
+git push origin main
+git push public main

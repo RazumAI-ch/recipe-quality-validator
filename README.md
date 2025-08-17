@@ -1,6 +1,6 @@
 # 🧪 Gemini Healthcare Recipe Quality Validator
 
-[![Docker Hub](https://img.shields.io/docker/pulls/igorrazumny/openai-recipe-quality-validator?style=flat-square)](https://hub.docker.com/r/igorrazumny/openai-recipe-quality-validator)
+[![Docker Hub](https://img.shields.io/docker/pulls/igorrazumny/recipe-quality-validator?style=flat-square)](https://hub.docker.com/r/igorrazumny/recipe-quality-validator)
 
 A containerized Streamlit app that audits healthcare manufacturing recipes using Gemini or Portkey-based LLMs.  
 Each commit triggers a GitHub Actions build and push to Docker Hub with multi-platform support (arm64 + amd64).
